@@ -34,6 +34,7 @@ try {
         null, // Service point ID
         '20190001', // Order number
         2500, // Weight (2.5kg)
+        null, //multicollo quantity (max 20. check carriers for compatibility)
         // Below options are only required when shipping outside the EU
         'customsInvoiceNumber',
         Parcel::CUSTOMS_SHIPMENT_TYPE_COMMERCIAL_GOODS,

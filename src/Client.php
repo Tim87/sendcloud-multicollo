@@ -162,6 +162,7 @@ class Client
      * @param int|null One of {@see Parcel::CUSTOMS_SHIPMENT_TYPES}.
      * @param ParcelItem[]|null $items Items contained in the parcel.
      * @param string|null $postNumber Number that may be required to send to a service point.
+     * @param int|null $quantity quantity of multicollo parcels.
      * @return Parcel
      * @throws SendCloudRequestException
      */
@@ -187,7 +188,8 @@ class Client
             $customsInvoiceNumber,
             $customsShipmentType,
             $items,
-            $postNumber
+            $postNumber,
+            $quantity
         );
 
         try {
@@ -220,6 +222,7 @@ class Client
             null,
             null,
             false,
+            null,
             null,
             null,
             null,
@@ -262,6 +265,7 @@ class Client
             true,
             $shippingMethod,
             $senderAddress,
+            null,
             null,
             null,
             null,
@@ -470,6 +474,7 @@ class Client
      * @param string|null $servicePointId
      * @param string|null $orderNumber
      * @param int|null $weight
+     * @param int|null $quantity
      * @param bool $requestLabel
      * @param ShippingMethod|int|null $shippingMethod Required if requesting a label.
      * @param SenderAddress|int|Address|null $senderAddress Passing null will pick SendCloud's default. An Address will
@@ -492,7 +497,8 @@ class Client
         ?string $customsInvoiceNumber,
         ?int $customsShipmentType,
         ?array $items,
-        ?string $postNumber
+        ?string $postNumber,
+        ?int $quantity
     ): array {
         $parcelData = [];
 
@@ -626,6 +632,10 @@ class Client
             $parcelData['shipment'] = [
                 'id' => $shippingMethod,
             ];
+        }
+
+        if ($quantity) {
+            $parcelData['quantity'] = $quantity;
         }
 
         return $parcelData;

@@ -113,6 +113,9 @@ class Parcel
     /** @var int */
     protected $weight;
 
+    /** @var int */
+    protected $quantity;
+
     /** @var string|null */
     protected $carrier;
 
@@ -142,6 +145,7 @@ class Parcel
         $this->created = new \DateTimeImmutable((string)$data['date_created']);
         $this->trackingNumber = (string)$data['tracking_number'];
         $this->weight = (int)round(((float)$data['weight']) * 1000);
+        
 
         $this->address = new Address(
             (string)$data['name'],
@@ -200,6 +204,10 @@ class Parcel
             foreach ((array)$data['parcel_items'] as $itemData) {
                 $this->items[] = ParcelItem::createFromData($itemData);
             }
+        }
+
+        if (isset($data['quantity'])) {
+            $this->quantity = (int)$data['quantity'];
         }
     }
 
@@ -283,6 +291,11 @@ class Parcel
         return $this->customsShipmentType;
     }
 
+    public function getMulticolloQuantity(): ?int
+    {
+        return $this->quantity;
+    }
+
     /**
      * @return ParcelItem[]
      */
@@ -314,6 +327,7 @@ class Parcel
             'items' => array_map(function (ParcelItem $item): array {
                 return $item->toArray();
             }, $this->getItems()),
+            'quantity' => $this->getMulticolloQuantity(),
         ];
     }
 
